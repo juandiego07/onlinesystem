@@ -1,0 +1,23 @@
+body{
+    background-color: black;
+}
+
+.logoEpayco{
+    max-width: 8em;
+}
+
+*{
+    font-family: 'Kanit', sans-serif;
+}
+
+.main{
+    margin-top: 5em;
+}
+
+.card-style{
+    width: 25em !important;
+}
+
+.mtop{
+    margin-top: 5em !important;
+}
