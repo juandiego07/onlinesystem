@@ -6,7 +6,7 @@
     <div class="position-absolute top-50 start-50 translate-middle">
         <form action="{{ route('login') }}" method="post" autocomplete="off">
             @csrf
-            <div class="card card-style">
+            <div class="card">
                 <div class="card-header">
                     <div class="card-title">
                         <h3><strong>Inicio de sesión</strong></h3>
