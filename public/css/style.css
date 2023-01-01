@@ -1,18 +1,19 @@
+* {
+    font-family: 'Kanit', sans-serif;
+}
+
 body{
     background-color: black;
+}
+
+.main {
+    margin-top: 5em;
 }
 
 .logoEpayco{
     max-width: 8em;
 }
 
-*{
-    font-family: 'Kanit', sans-serif;
-}
-
-.main{
-    margin-top: 5em;
-}
 
 .card-style{
     width: 25em !important;
@@ -20,4 +21,16 @@ body{
 
 .mtop{
     margin-top: 5em !important;
+}
+
+@media screen and (min-width: 576px) {
+    .cardLogin {
+        width: 25em !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .cardLogin {
+        width: 15em !important;
+    }
 }
