@@ -95,7 +95,7 @@
                 <div class="card card-style m-2">
                     <div class="row g-0">
                         <div class="col-4 d-flex justify-content-center align-items-center p-1">
-                            <img class="img-fluid rounded-start" src="{{ asset('./img/user.svg') }}"alt="imgUser">
+                            <img class="img-fluid rounded-start" src="{{ secure_asset('./img/user.svg') }}"alt="imgUser">
                         </div>
                         <div class="col-8">
                             <div class="card-body">

@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <img class="logoEpayco ms-2" src="{{ asset('./img/03_gris.svg') }}" alt="logo">
+                <img class="logoEpayco ms-2" src="{{ secure_asset('./img/03_gris.svg') }}" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                     <span class="navbar-toggler-icon"></span>
