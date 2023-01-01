@@ -6,6 +6,8 @@ use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BillController extends Controller
 {
@@ -16,8 +18,16 @@ class BillController extends Controller
      */
     public function index()
     {
-        //dd('Test');
-        return view('epayco.invoice');
+        $customers = User::find(auth()->user()->id)->customers()->get();
+
+        $bills = DB::table('bills')
+            ->where('user_id', '=', auth()->user()->id)
+            ->where('status', '=', 'Pendiente')
+            ->join('customers', 'customers.id', '=', 'bills.customer_id')
+            ->select('bills.*', 'customers.name', 'customers.last_name')
+            ->get();
+
+        return view('epayco.invoice', ['customers' => $customers], ['bills' => $bills]);
     }
 
     /**
@@ -27,8 +37,7 @@ class BillController extends Controller
      */
     public function create()
     {
-        $customers = User::find(auth()->user()->id)->customers()->get();
-        // return view('epayco.invoice', ['customers' => $customers]);
+        // 
     }
 
     /**
@@ -40,24 +49,21 @@ class BillController extends Controller
     public function store(Request $request)
     {
         $data = [
-            'document_type' => $request->input('document_type'),
-            'document_number' => $request->input('document_number'),
-            'phone_number' => $request->input('phone_number'),
-            'name' => $request->input('name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'address' => $request->input('address'),
+            'tax_base' => $request->input('tax_base'),
+            'tax' => $request->input('tax'),
+            'amount' => $request->input('amount'),
+            'currency' => $request->input('currency'),
+            'date' => $request->input('date'),
+            'expiration_date' => $request->input('expiration_date'),
+            'status' => 'Pendiente',
+            'description' => $request->input('description'),
+            'user_id' => auth()->user()->id,
         ];
 
-        $customer = Customer::create($data);
-
-        $user = User::find(auth()->user()->id);
-
-        $user->customers()->attach($customer->id);
-
-        $customers = User::find(auth()->user()->id)->customers()->get();
+        $customer = Customer::find($request->input('customer'));
+        $customer->bills()->create($data);
         // Alert::success('Registro creado con exito');
-        return redirect()->route('customer', ['customers' => $customers]);
+        return redirect()->route('invoice');
     }
 
     /**
@@ -66,9 +72,62 @@ class BillController extends Controller
      * @param  \App\Models\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function show(Bill $bill)
+    public function show(Request $request)
     {
-        //
+        $userpwd = explode(":", base64_decode(substr($request->header('authorization'), 6)));
+        $credentials = [
+            'email' => $userpwd[0],
+            'password' => $userpwd[1],
+        ];
+        if (!Auth::attempt($credentials)) {
+            $data = 'Usuario o constraseña invalidos';
+            return response()->json(compact('data'));
+        }
+
+        if ($request->input() == []) {
+
+            $data = 'Consulta exitosa';
+            return response()->json(compact('data'));
+        } else if (!DB::table('customers')
+            ->where('document_type', '=', $request->input('document_type'))
+            ->where('document_number', '=', $request->input('document_number'))
+            ->exists()) {
+
+            $data = 'No se encuentran facturas pendientes';
+            return response()->json(compact('data'));
+        } else {
+
+            $customer = DB::table('customers')
+                ->where('document_type', '=', $request->input('document_type'))
+                ->where('document_number', '=', $request->input('document_number'))
+                ->get();
+
+            $bills = DB::table('bills')
+                ->where('customer_id', '=', $customer[0]->id)
+                ->where('status', '=', 'Pendiente')
+                ->join('customers', 'customers.id', '=', 'bills.customer_id')
+                ->select('bills.id', 'bills.tax_base', 'bills.tax', 'bills.amount', 'bills.currency', 'bills.expiration_date', 'bills.description', 'customers.document_type', 'customers.document_number', 'customers.name', 'customers.last_name')
+                ->get();
+
+            $data = [];
+
+            foreach ($bills as $bill) {
+                array_push($data, array(
+                    "id" => $bill->id,
+                    "tax_base" => $bill->tax_base,
+                    "tax" => $bill->tax,
+                    "amount" => $bill->amount,
+                    "currency" => $bill->currency,
+                    "expiration_date" => $bill->expiration_date,
+                    "description" => $bill->description,
+                    "document_type" => $bill->document_type,
+                    "document_number" => $bill->document_number,
+                    "full_name" => $bill->name . ' ' . $bill->last_name
+                ));
+            }
+
+            return response()->json(compact('data'));
+        }
     }
 
     /**
