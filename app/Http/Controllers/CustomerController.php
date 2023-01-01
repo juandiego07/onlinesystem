@@ -15,7 +15,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('epayco.customer');
+        $customers = User::find(auth()->user()->id)->customers()->get();
+        return view('epayco.customer', ['customers' => $customers]);
     }
 
     /**
@@ -25,8 +26,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $customers = User::find(auth()->user()->id)->customers()->get();
-        return view('layouts.customer.index', ['customers' => $customers]);
+
     }
 
     /**
@@ -37,6 +37,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
         $data = [
             'document_type' => $request->input('document_type'),
             'document_number' => $request->input('document_number'),
@@ -55,7 +56,7 @@ class CustomerController extends Controller
 
         $customers = User::find(auth()->user()->id)->customers()->get();
         // Alert::success('Registro creado con exito');
-        return redirect()->route('customer', ['customers' => $customers]);
+        return redirect()->route('customer');
     }
 
     /**
