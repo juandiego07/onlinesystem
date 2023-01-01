@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="{{ asset('js/style.js') }}"></script>
-    <link rel="stylesheet" href={{ asset('./css/style.css') }}>
+    <script src="{{ secure_asset('js/style.js') }}"></script>
+    <link rel="stylesheet" href={{ secure_asset('./css/style.css') }}>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>@yield('title') | ePayco</title>
@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <img class="logoEpayco ms-2" src="{{ secure_asset('./img/03_gris.svg') }}" alt="logo">
+                <img class="logoEpayco ms-2" src="{{ secure_secure_asset('./img/03_gris.svg') }}" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                     <span class="navbar-toggler-icon"></span>
@@ -75,7 +75,7 @@
             <h6>copyright</h6>
         </div>
     </footer> --}}
-    <script src="{{ asset('js/date.js') }}"></script>
+    <script src="{{ secure_asset('js/date.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
     </script>
