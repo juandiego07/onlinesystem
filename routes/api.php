@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/confirmation', 'App\Http\Controllers\ConfirmationController@store');
 Route::post('/bills', 'App\Http\Controllers\ConfirmationController@store');
+// route
